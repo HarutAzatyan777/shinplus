@@ -61,9 +61,9 @@ const Services = () => {
             <h3>{service.title}</h3>
             <p>{service.description}</p>
             <div className="buttons">
-              <button onClick={() => openModal(service)}>Մանրամասներ (մոդալ)</button>
+              <button onClick={() => openModal(service)}>Մանրամասներ </button>
               <button onClick={() => navigate(`/project/${service.slug}`)}>
-                Մանրամասներ (էջ)
+                Մանրամասներ 
               </button>
             </div>
           </div>

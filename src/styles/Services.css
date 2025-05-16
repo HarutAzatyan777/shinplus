@@ -22,7 +22,7 @@
   .project-card {
     background: #fff;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     width: 280px;
     display: flex;
     flex-direction: column;
@@ -36,27 +36,39 @@
     transform: translateY(-5px);
   }
   
-  .project-image {
+  .project-image,
+  .modal-image {
     width: 100%;
-    height: 160px;
     object-fit: cover;
     border-radius: 8px;
-    margin-bottom: 15px;
     user-select: none;
+  }
+  
+  .project-image {
+    height: 160px;
+    margin-bottom: 15px;
+  }
+  
+  .project-card h3,
+  .modal h2 {
+    color: #222;
+    text-align: center;
+    margin-bottom: 10px;
   }
   
   .project-card h3 {
     font-size: 1.3rem;
-    color: #222;
-    margin-bottom: 10px;
-    text-align: center;
   }
   
-  .project-card p {
+  .project-card p,
+  .modal p {
     font-size: 1rem;
     color: #555;
     text-align: center;
     margin-bottom: 20px;
+  }
+  
+  .project-card p {
     flex-grow: 1;
   }
   
@@ -65,33 +77,35 @@
     gap: 10px;
     width: 100%;
     justify-content: center;
+    flex-wrap: wrap;
   }
   
-  .buttons button {
-    flex: 1;
+  .buttons button,
+  .modal button {
     padding: 8px 12px;
     border: none;
     border-radius: 6px;
-    background-color: #007bff;
+    background-color: #28a745; /* Green */
     color: white;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    flex: 1;
   }
   
-  .buttons button:hover {
-    background-color: #0056b3;
+  .buttons button:hover,
+  .modal button:hover {
+    background-color: #1e7e34; /* Darker green */
   }
   
   /* Modal Styles */
-  
   .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -105,7 +119,7 @@
     max-width: 500px;
     width: 100%;
     padding: 25px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -113,43 +127,20 @@
   }
   
   .modal-image {
-    width: 100%;
     height: 250px;
-    object-fit: cover;
-    border-radius: 8px;
     margin-bottom: 20px;
-    user-select: none;
-  }
-  
-  .modal h2 {
-    margin-bottom: 15px;
-    color: #222;
   }
   
   .modal p {
-    color: #555;
-    font-size: 1rem;
     margin-bottom: 25px;
   }
   
   .modal button {
     padding: 10px 25px;
-    background-color: #007bff;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
   }
   
-  .modal button:hover {
-    background-color: #0056b3;
-  }
-
-
-  /* Responsive for tablets and phones */
-@media (max-width: 768px) {
+  /* Responsive tablets & phones */
+  @media (max-width: 768px) {
     .services {
       padding: 30px 15px;
     }
@@ -172,7 +163,8 @@
       font-size: 1.2rem;
     }
   
-    .project-card p {
+    .project-card p,
+    .modal p {
       font-size: 0.95rem;
     }
   
@@ -180,7 +172,8 @@
       flex-direction: column;
     }
   
-    .buttons button {
+    .buttons button,
+    .modal button {
       width: 100%;
     }
   
@@ -192,17 +185,9 @@
     .modal-image {
       height: 200px;
     }
-  
-    .modal p {
-      font-size: 0.95rem;
-    }
-  
-    .modal button {
-      width: 100%;
-    }
   }
   
-  /* Responsive for very small screens */
+  /* Very small screens */
   @media (max-width: 480px) {
     .services h2 {
       font-size: 2rem;
@@ -212,17 +197,13 @@
       font-size: 1.1rem;
     }
   
-    .project-card p {
+    .project-card p,
+    .modal p {
       font-size: 0.9rem;
     }
   
     .modal h2 {
       font-size: 1.5rem;
     }
-  
-    .modal p {
-      font-size: 0.9rem;
-    }
   }
-  
   

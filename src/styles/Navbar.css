@@ -1,5 +1,4 @@
-/* Existing desktop styles ... */
-
+/* Navbar styles remain unchanged */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -18,7 +17,6 @@
     font-weight: bold;
   }
   
-  
   .navbar-links {
     display: flex;
     gap: 20px;
@@ -36,12 +34,14 @@
     color: #007bff;
   }
   
-  /* Burger Menu - Hidden on desktop */
+  /* Burger menu */
   .burger {
     display: none;
     flex-direction: column;
     cursor: pointer;
     gap: 5px;
+    z-index: 1000;
+    transition: transform 0.3s ease;
   }
   
   .burger .line {
@@ -49,9 +49,22 @@
     height: 3px;
     background-color: #333;
     border-radius: 3px;
+    transition: all 0.3s ease;
   }
   
-  /* Responsive - Mobile */
+  .burger.open .line1 {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .burger.open .line2 {
+    opacity: 0;
+  }
+  
+  .burger.open .line3 {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
+  /* Mobile nav */
   @media (max-width: 768px) {
     .burger {
       display: flex;
@@ -65,13 +78,18 @@
       flex-direction: column;
       gap: 15px;
       padding: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       border-radius: 10px;
-      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
     }
   
     .navbar-links.open {
-      display: flex;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
   }
   
