@@ -1,0 +1,101 @@
+/* Portfolio section wrapper */
+.portfolio {
+  padding: 2rem 1rem;
+  background-color: #f8f8f8;
+  text-align: center;
+}
+
+.portfolio h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #222;
+}
+
+/* Slider wrapper */
+.slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Slide container */
+.slides-container {
+  display: flex;
+  gap: 1rem;
+  transition: transform 0.4s ease-in-out;
+}
+
+/* Single slide item */
+.slide {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+  transition: transform 0.3s ease;
+}
+
+.slide:hover {
+  transform: scale(1.03);
+}
+
+.slide-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Navigation buttons */
+.slider-btn {
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  transition: background-color 0.3s ease;
+  border-radius: 50%;
+}
+
+.slider-btn:hover,
+.slider-btn:focus {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.slider-btn.prev {
+  left: 0.5rem;
+}
+
+.slider-btn.next {
+  right: 0.5rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .slide {
+    max-width: 45%;
+  }
+}
+
+@media (max-width: 480px) {
+  .slide {
+    max-width: 90%;
+  }
+
+  .slider-btn {
+    font-size: 1.5rem;
+    padding: 0.3rem 0.7rem;
+  }
+}
