@@ -11,10 +11,13 @@
     z-index: 999;
   }
   
-  .navbar-logo {
+  .navbar-logo a {
+    text-decoration: none;
+    color: inherit;
     font-size: 1.5rem;
     font-weight: bold;
   }
+  
   
   .navbar-links {
     display: flex;
