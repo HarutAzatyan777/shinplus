@@ -1,29 +1,74 @@
+/* Existing desktop styles ... */
+
 .navbar {
-    background-color: #1e1e1e;
-    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 32px;
+    padding: 1rem 20px;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 999;
   }
   
   .navbar-logo {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
   }
   
   .navbar-links {
-    list-style: none;
     display: flex;
     gap: 20px;
+    list-style: none;
   }
   
-  .navbar-links a {
-    color: white;
-    transition: 0.3s;
+  .navbar-links li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
   }
   
-  .navbar-links a:hover {
-    color: #f7c100;
+  .navbar-links li a:hover {
+    color: #007bff;
+  }
+  
+  /* Burger Menu - Hidden on desktop */
+  .burger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+  }
+  
+  .burger .line {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    border-radius: 3px;
+  }
+  
+  /* Responsive - Mobile */
+  @media (max-width: 768px) {
+    .burger {
+      display: flex;
+    }
+  
+    .navbar-links {
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: white;
+      flex-direction: column;
+      gap: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      display: none;
+    }
+  
+    .navbar-links.open {
+      display: flex;
+    }
   }
   

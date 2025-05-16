@@ -30,4 +30,38 @@
   .about-cta-btn:hover {
     background-color: #00796b;
   }
+  @media (max-width: 768px) {
+    .about {
+      padding: 1.5rem 1rem;
+    }
+  
+    .about h2 {
+      font-size: 1.6rem;
+    }
+  
+    .about p {
+      font-size: 1rem;
+    }
+  
+    .about-cta-btn {
+      font-size: 0.95rem;
+      padding: 0.6rem 1.2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .about h2 {
+      font-size: 1.4rem;
+    }
+  
+    .about p {
+      font-size: 0.95rem;
+    }
+  
+    .about-cta-btn {
+      width: 100%;
+      padding: 0.7rem;
+      font-size: 1rem;
+    }
+  }
   

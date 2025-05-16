@@ -146,4 +146,83 @@
   .modal button:hover {
     background-color: #0056b3;
   }
+
+
+  /* Responsive for tablets and phones */
+@media (max-width: 768px) {
+    .services {
+      padding: 30px 15px;
+    }
+  
+    .projects-grid {
+      gap: 16px;
+    }
+  
+    .project-card {
+      width: 100%;
+      max-width: 90%;
+      padding: 12px;
+    }
+  
+    .project-image {
+      height: 150px;
+    }
+  
+    .project-card h3 {
+      font-size: 1.2rem;
+    }
+  
+    .project-card p {
+      font-size: 0.95rem;
+    }
+  
+    .buttons {
+      flex-direction: column;
+    }
+  
+    .buttons button {
+      width: 100%;
+    }
+  
+    .modal {
+      max-width: 90%;
+      padding: 20px;
+    }
+  
+    .modal-image {
+      height: 200px;
+    }
+  
+    .modal p {
+      font-size: 0.95rem;
+    }
+  
+    .modal button {
+      width: 100%;
+    }
+  }
+  
+  /* Responsive for very small screens */
+  @media (max-width: 480px) {
+    .services h2 {
+      font-size: 2rem;
+    }
+  
+    .project-card h3 {
+      font-size: 1.1rem;
+    }
+  
+    .project-card p {
+      font-size: 0.9rem;
+    }
+  
+    .modal h2 {
+      font-size: 1.5rem;
+    }
+  
+    .modal p {
+      font-size: 0.9rem;
+    }
+  }
+  
   
