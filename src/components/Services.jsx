@@ -1,51 +1,51 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import '../styles/Services.css' // assuming you have styles
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/Services.css"; // assuming you have styles
 
 const services = [
   {
-    title: 'Եվրոպական պատուհանների տեղադրում',
-    description: 'Մասնագիտացված տեղադրում՝ ջերմամեկուսիչ նյութերով։',
-    slug: 'euro-windows',
-    image: '/images/euro-windows.jpg',
+    title: "Եվրոպական պատուհանների տեղադրում",
+    description: "Մասնագիտացված տեղադրում՝ ջերմամեկուսիչ նյութերով։",
+    slug: "euro-windows",
+    image: "/images/euro-windows.jpg",
   },
   {
-    title: 'Գիպսակարդոնի աշխատանքներ',
-    description: 'Խոնավության դիմացկուն և կրակադիմացկուն լուծումներ։',
-    slug: 'drywall-installation',
-    image: '/images/drywall-installation.jpg',
+    title: "Գիպսակարդոնի աշխատանքներ",
+    description: "Խոնավության դիմացկուն և կրակադիմացկուն լուծումներ։",
+    slug: "drywall-installation",
+    image: "/images/drywall-installation.jpg",
   },
   {
-    title: 'Սալիկապատում',
-    description: 'Բարձր որակի կերամիկա, խոհանոց, լոգասենյակ և այլն։',
-    slug: 'tiling-services',
-    image: '/images/tiling-services.jpg',
+    title: "Սալիկապատում",
+    description: "Բարձր որակի կերամիկա, խոհանոց, լոգասենյակ և այլն։",
+    slug: "tiling-services",
+    image: "/images/tiling-services.jpg",
   },
   {
-    title: 'Լամինատի տեղադրում',
-    description: 'Ձայնամեկուսիչ հիմքով, խոնավության դիմացկուն լամինատ։',
-    slug: 'laminate-installation',
-    image: '/images/laminate-installation.jpg',
+    title: "Լամինատի տեղադրում",
+    description: "Ձայնամեկուսիչ հիմքով, խոնավության դիմացկուն լամինատ։",
+    slug: "laminate-installation",
+    image: "/images/laminate-installation.jpg",
   },
   {
-    title: 'Պատերի հարդարում',
-    description: 'Հարթեցում, ներկում և դեկորատիվ շերտեր՝ ցանկացած դիզայնով։',
-    slug: 'wall-finishing',
-    image: '/images/wall-finishing.jpg',
+    title: "Պատերի հարդարում",
+    description: "Հարթեցում, ներկում և դեկորատիվ շերտեր՝ ցանկացած դիզայնով։",
+    slug: "wall-finishing",
+    image: "/images/wall-finishing.jpg",
   },
-]
+];
 
 const Services = () => {
-  const navigate = useNavigate()
-  const [modalProject, setModalProject] = useState(null)
+  const navigate = useNavigate();
+  const [modalProject, setModalProject] = useState(null);
 
   const openModal = (project) => {
-    setModalProject(project)
-  }
+    setModalProject(project);
+  };
 
   const closeModal = () => {
-    setModalProject(null)
-  }
+    setModalProject(null);
+  };
 
   return (
     <div className="services" id="services">
@@ -61,9 +61,9 @@ const Services = () => {
             <h3>{service.title}</h3>
             <p>{service.description}</p>
             <div className="buttons">
-              <button onClick={() => openModal(service)}>Մանրամասներ </button>
+              <button onClick={() => openModal(service)}>Դիտել</button>
               <button onClick={() => navigate(`/project/${service.slug}`)}>
-                Մանրամասներ 
+                Մանրամասներ
               </button>
             </div>
           </div>
@@ -86,7 +86,7 @@ const Services = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Services
+export default Services;
