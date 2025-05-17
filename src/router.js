@@ -9,6 +9,9 @@ import Calculators from './pages/Calculators'
 import TilesCalculator from './pages/calculators/TilesCalculator'
 import PaintCalculator from './pages/calculators/PaintCalculator'  // <-- այստեղ ավելացրու
 import GypsumCalculator from './pages/calculators/GypsumCalculator'
+import LaminateCalculator from './pages/calculators/LaminateCalculator'
+import ElectricWiresCalculator from './pages/calculators/ElectricWiresCalculator'
+
 const AppRouter = () => {
   return (
     <Routes>
@@ -35,6 +38,11 @@ const AppRouter = () => {
       <Route path="/calculators/tiles" element={<Layout><TilesCalculator /></Layout>} />
       <Route path="/calculators/paint" element={<Layout><PaintCalculator /></Layout>} />  {/* <-- այստեղ ավելացրու */}
       <Route path="/calculators/gypsum" element={<Layout><GypsumCalculator /></Layout>} />
+      <Route
+  path="/calculators/laminate"
+  element={<Layout><LaminateCalculator /></Layout>}
+/>
+<Route path="/calculators/electric-wires" element={<ElectricWiresCalculator />} />
       {/* Standalone page */}
       <Route path="/project/:slug" element={<ProjectDetail />} />
     </Routes>

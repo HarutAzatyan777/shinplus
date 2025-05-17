@@ -8,9 +8,8 @@ const Calculators = () => {
   return (
     <div className="calculators-page">
       <div className="breadcrumb">
-        <span onClick={() => navigate('/')}>🏠 Գլխավոր</span>
-        <span className="breadcrumb-separator">›</span>
-        <span className="current">Շինարարական հաշվիչներ</span>
+        <span className="breadcrumb-home" onClick={() => navigate('/')}>‹ Գլխավոր</span>
+        <span className="breadcrumb-current">Շինարարական հաշվիչներ</span>
       </div>
 
       <h2>Շինարարական Հաշվիչներ</h2>
@@ -35,6 +34,14 @@ const Calculators = () => {
           <h3>Գիպսակարտոնի հաշվիչ</h3>
           <p>Հաշվեք գիպսակարտոնե պանելների քանակը և պռոֆիլները։</p>
         </div>
+        <div className="calculator-card" onClick={() => navigate('/calculators/laminate')}>
+          <h3>Լամինատի հաշվիչ</h3>
+          <p>Հաշվեք անհրաժեշտ լամինատի քանակը՝ ըստ տարածքի։</p>
+        </div>
+        <div className="calculator-card" onClick={() => navigate('/calculators/electric-wires')}>
+  <h3>Էլեկտրական լարերի հաշվիչ</h3>
+  <p>Հաշվեք լարերի ընդհանուր երկարությունը և էլեկտրասարքերի հզորությունը՝ սենյակների համար։</p>
+</div>
       </div>
     </div>
   )

@@ -1,56 +1,151 @@
 .concrete-calculator {
     max-width: 600px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    margin: 30px auto;
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
   }
   
   .concrete-calculator h2 {
     text-align: center;
+    font-size: 22px;
+    color: #111;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .concrete-calculator p {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
     margin-bottom: 20px;
   }
   
   .input-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
   }
   
   .input-group label {
+    font-size: 15px;
     font-weight: 500;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    color: #333;
   }
   
   .input-group input {
-    padding: 10px;
+    padding: 12px 14px;
     font-size: 16px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    border-radius: 12px;
+    border: 1px solid #d1d1d6;
+    background-color: #fff;
+    transition: border 0.2s;
+  }
+  
+  .input-group input:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
   }
   
   .calculate-btn {
     width: 100%;
-    padding: 12px;
-    background-color: #4CAF50;
+    padding: 14px;
+    background-color: #007aff;
     color: white;
     border: none;
-    font-size: 16px;
-    border-radius: 6px;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 12px;
     cursor: pointer;
-    margin-top: 15px;
     transition: background-color 0.3s ease;
   }
   
   .calculate-btn:hover {
-    background-color: #45a049;
+    background-color: #005ecb;
   }
-  
   
   .result {
-    margin-top: 20px;
+    margin-top: 25px;
     text-align: center;
-    font-size: 18px;
+    font-size: 17px;
+    color: #1c1c1e;
   }
   
+  .result strong {
+    color: #007aff;
+  }
+  
+  /* Breadcrumb iOS-style */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    margin-bottom: 25px;
+    color: #007aff;
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  .breadcrumb span {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  
+  .breadcrumb span:hover {
+    opacity: 0.7;
+  }
+  
+  .breadcrumb .current {
+    color: #8e8e93;
+    pointer-events: none;
+  }
+  @media (max-width: 480px) {
+    .concrete-calculator {
+      margin: 20px 10px;
+      padding: 20px;
+      border-radius: 16px;
+    }
+  
+    .concrete-calculator h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+  
+    .concrete-calculator p {
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+  
+    .input-group label {
+      font-size: 14px;
+    }
+  
+    .input-group input {
+      padding: 10px 12px;
+      font-size: 15px;
+      border-radius: 10px;
+    }
+  
+    .calculate-btn {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+  
+    .result {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+  
+    .breadcrumb {
+      font-size: 14px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+  }
+    

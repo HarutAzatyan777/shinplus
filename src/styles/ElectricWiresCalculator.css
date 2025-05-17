@@ -1,0 +1,146 @@
+.electric-wires-calculator {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .electric-wires-calculator h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .electric-wires-calculator p {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+  }
+  
+  .input-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+  }
+  
+  .input-group select,
+  .input-pair input {
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .room-box {
+    padding: 15px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e2e2;
+  }
+  
+  .room-box h4 {
+    margin-bottom: 10px;
+    color: #444;
+  }
+  
+  .input-pair {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .input-pair label {
+    flex: 1 1 100%;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  
+  .input-pair input {
+    flex: 1 1 48%;
+  }
+  
+  .appliance-list {
+    margin-top: 10px;
+  }
+  
+  .appliance-list h5 {
+    margin-bottom: 10px;
+    color: #444;
+  }
+  
+  .appliance-list .input-pair input {
+    flex: 1 1 48%;
+  }
+  
+  button {
+    padding: 10px 16px;
+    margin: 8px 4px 12px 0;
+    border: none;
+    background-color: #3366cc;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #254a9c;
+  }
+  
+  .calculate-btn {
+    background-color: #28a745;
+  }
+  
+  .calculate-btn:hover {
+    background-color: #1c7d33;
+  }
+  
+  .result {
+    background-color: #e9f7ef;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-top: 20px;
+    color: #1b5e20;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  /* Mobile Responsive */
+  @media (max-width: 600px) {
+    .electric-wires-calculator {
+      padding: 15px;
+    }
+  
+    .input-pair {
+      flex-direction: column;
+    }
+  
+    .input-pair input {
+      width: 100%;
+    }
+  
+    .appliance-list .input-pair input {
+      width: 100%;
+    }
+  
+    button {
+      width: 100%;
+      margin: 6px 0;
+    }
+  
+    .result {
+      font-size: 15px;
+    }
+  }
+  
