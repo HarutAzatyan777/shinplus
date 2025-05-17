@@ -1,29 +1,124 @@
 .project-detail {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 30px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.project-detail h2 {
+  margin-bottom: 20px;
+}
+
+.project-detail p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.project-detail button {
+  margin-top: 30px;
+  padding: 12px 24px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.project-detail-image {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.mobile-back {
+  display: none;
+}
+
+.desktop-back {
+  display: inline-block;
+}
+.breadcrumb {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.breadcrumb span {
+  cursor: pointer;
+  color: #007bff;
+}
+.toggle-description {
+  margin: 10px 0;
+  padding: 6px 14px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toggle-description:hover {
+  background-color: #ddd;
+}
+
+.project-description {
+  margin-top: 15px;
+  line-height: 1.6;
+}
+
+
+.breadcrumb span:last-child {
+  color: #000;
+  cursor: default;
+}
+
+
+/* Հեռախոսի չափսեր */
+@media (max-width: 768px) {
+  .project-detail {
+    margin: 20px 10px;
+    padding: 20px;
   }
-  
+
   .project-detail h2 {
-    margin-bottom: 20px;
+    font-size: 20px;
   }
-  
+
   .project-detail p {
-    font-size: 18px;
-    line-height: 1.6;
+    font-size: 16px;
   }
-  
+
   .project-detail button {
-    margin-top: 30px;
-    padding: 12px 24px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
   }
-  
+
+  .project-detail-image {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+
+  .breadcrumb {
+    font-size: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .breadcrumb span {
+    display: block;
+  }
+
+  .breadcrumb .breadcrumb-separator {
+    display: none;
+  }
+}
+

@@ -1,0 +1,42 @@
+.calculators-page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  
+  .calculators-page h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .intro-text {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+  
+  .calculators-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .calculator-card {
+    background: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .calculator-card:hover {
+    background: #e1e1e1;
+  }
+  
+  .calculator-card h3 {
+    margin-bottom: 10px;
+  }
+  

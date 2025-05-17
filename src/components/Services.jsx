@@ -33,6 +33,24 @@ const services = [
     slug: "wall-finishing",
     image: "/images/wall-finishing.jpg",
   },
+  {
+    title: "Դարբնու աշխատանքներ",
+    description: "Դարպասներ, ցանկապատեր, մետաղական կառուցվածքներ։",
+    slug: "metalwork",
+    image: "/images/metalwork.jpg",
+  },
+  {
+    title: "Զոդում (սվառկա)",
+    description: "Մետաղական միացումներ՝ որակով և ամուր։",
+    slug: "welding",
+    image: "/images/welding.jpg",
+  },
+  {
+    title: "Սանտեղնիկ աշխատանքներ",
+    description: "Ջրամատակարարման և կոյուղու համակարգերի տեղադրում և նորոգում։",
+    slug: "plumbing",
+    image: "/images/plumbing.jpg",
+  },
 ];
 
 const Services = () => {

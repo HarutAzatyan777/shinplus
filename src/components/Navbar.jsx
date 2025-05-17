@@ -21,6 +21,7 @@ const Navbar = () => {
         <li><a href="#portfolio">Պրոյեկտներ</a></li>
         <li><a href="#about">Մեր Մասին</a></li>
         <li><a href="#contact">Կապ</a></li>
+        <li><a href="/calculators">Հաշվիչներ</a></li> {/* ԱՅՍՏԵՂ ԱՎԵԼԱՑՎԱԾ Է */}
       </ul>
     </nav>
   )
