@@ -1,15 +1,17 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/HeroSection.css'
 
 const HeroSection = () => {
+  const navigate = useNavigate()
+
   const scrollToContact = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' });
+    const contactSection = document.getElementById('contact')
+    if (contactSection) contactSection.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const scrollToProjects = () => {
-    const projectsSection = document.getElementById('portfolio');
-    if (projectsSection) projectsSection.scrollIntoView({ behavior: 'smooth' });
+  const goToCalculators = () => {
+    navigate('/calculators')
   }
 
   return (
@@ -20,7 +22,7 @@ const HeroSection = () => {
         <p>ShinPlus — Մասնագիտացված շինարարական ծառայություններ ամբողջ Հայաստանում</p>
         <div className="hero-buttons">
           <button onClick={scrollToContact}>Հարցում կատարել</button>
-          <button className="outline" onClick={scrollToProjects}>Դիտել նախագծերը</button>
+          <button className="outline" onClick={goToCalculators}>Հաշվիչներ</button>
         </div>
       </div>
     </section>

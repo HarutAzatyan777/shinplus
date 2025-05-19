@@ -1,23 +1,40 @@
-import React, { useState } from 'react'
-import jsPDF from 'jspdf'
+import React, { useState, useRef } from 'react'
+import html2canvas from 'html2canvas'
 import '../../styles/ElectricWiresCalculator.css'
+
+const MATERIAL_RESISTIVITY = {
+  copper: 1.68e-8,   // Ω·m
+  aluminum: 2.65e-8  // Ω·m
+}
 
 const ElectricWiresCalculator = () => {
   const [rooms, setRooms] = useState([
     { length: 4, width: 3, sockets: 4, switches: 2, appliances: [{ name: 'Լամպ', power: 60 }] }
   ])
   const [wireType, setWireType] = useState('2.5')
+
+  const [systemType, setSystemType] = useState('single-phase')
+  const [voltage, setVoltage] = useState(230)
+  const [voltageDropPercent, setVoltageDropPercent] = useState(3)
+  const [material, setMaterial] = useState('copper')
+  const [current, setCurrent] = useState(10)
+  const [distance, setDistance] = useState(20)
+  const [maxTemp, setMaxTemp] = useState(75)
+
   const [result, setResult] = useState(null)
+  const resultRef = useRef(null)
 
   const handleRoomChange = (index, field, value) => {
     const newRooms = [...rooms]
-    newRooms[index][field] = field === 'length' || field === 'width' || field === 'sockets' || field === 'switches' ? Number(value) : value
+    newRooms[index][field] = ['length','width','sockets','switches'].includes(field)
+      ? Number(value)
+      : value
     setRooms(newRooms)
   }
 
-  const handleApplianceChange = (index, applianceIndex, field, value) => {
+  const handleApplianceChange = (roomIndex, applianceIndex, field, value) => {
     const newRooms = [...rooms]
-    newRooms[index].appliances[applianceIndex][field] = field === 'power' ? Number(value) : value
+    newRooms[roomIndex].appliances[applianceIndex][field] = field === 'power' ? Number(value) : value
     setRooms(newRooms)
   }
 
@@ -32,66 +49,79 @@ const ElectricWiresCalculator = () => {
   }
 
   const calculate = () => {
+    const rho = MATERIAL_RESISTIVITY[material]
+    const deltaV = (voltage * voltageDropPercent) / 100
+    const L = distance
+    const A_m2 = (rho * L * current) / deltaV
+    const A_mm2 = A_m2 * 1e6
+    const diameter_m = 2 * Math.sqrt(A_m2 / Math.PI)
+    const diameter_mm = diameter_m * 1000
+
     let totalLength = 0
     let totalPower = 0
-
     rooms.forEach(room => {
-      const perimeter = 2 * (room.length + room.width)
-      const socketWire = room.sockets * 5
-      const switchWire = room.switches * 3
-      const roomLength = perimeter + socketWire + switchWire
-      totalLength += roomLength
-
-      room.appliances.forEach(appliance => {
-        totalPower += appliance.power
-      })
+      const perim = 2 * (room.length + room.width)
+      totalLength += perim + room.sockets * 5 + room.switches * 3
+      room.appliances.forEach(ap => totalPower += ap.power)
     })
 
-    setResult({ totalLength, totalPower })
+    setResult({
+      totalLength,
+      totalPower,
+      area: A_mm2.toFixed(2),
+      diameter: diameter_mm.toFixed(2)
+    })
   }
 
-  const downloadPDF = () => {
-    const doc = new jsPDF()
-
-    doc.setFontSize(16)
-    doc.text('Էլեկտրական լարերի հաշվիչի արդյունքներ', 10, 20)
-
-    doc.setFontSize(12)
-    let y = 30
-    rooms.forEach((room, index) => {
-      doc.text(`Սենյակ ${index + 1}:`, 10, y)
-      y += 6
-      doc.text(`  - Չափսեր՝ ${room.length}մ x ${room.width}մ`, 10, y)
-      y += 6
-      doc.text(`  - Վարդակներ՝ ${room.sockets}, Անջատիչներ՝ ${room.switches}`, 10, y)
-      y += 6
-
-      if (room.appliances.length > 0) {
-        doc.text(`  - Սարքեր`, 10, y)
-        room.appliances.forEach(appliance => {
-          y += 6
-          doc.text(`    • ${appliance.name || 'անհայտ'}: ${appliance.power} Վտ`, 10, y)
-        })
-      } else {
-        y += 6
-        doc.text(`  - Սարքեր չկան`, 10, y)
-      }
-
-      y += 10
+  const downloadImage = () => {
+    if (!resultRef.current) return
+    html2canvas(resultRef.current).then(canvas => {
+      const link = document.createElement('a')
+      link.download = 'electric-wires-calculation.png'
+      link.href = canvas.toDataURL('image/png')
+      link.click()
     })
-
-    doc.text(`Ընդհանուր լարի երկարություն: ${result?.totalLength || 0} մ`, 10, y)
-    y += 6
-    doc.text(`Ընդհանուր հզորություն: ${result?.totalPower || 0} Վտ`, 10, y)
-
-    doc.save('electric-wires-calculation.pdf')
   }
 
   return (
     <div className="electric-wires-calculator">
-      <h2>Մանրակրկիտ էլեկտրական լարերի հաշվիչ</h2>
-      <p>Հաշվիր պահանջվող լարերը՝ ըստ սենյակների, լարերի տեսակի, հզորությունների։</p>
+      <h2>Մանրակ. էլեկտր. լարերի հաշվիչ</h2>
 
+      <div className="input-group">
+        <label>Համակարգի տեսակը</label>
+        <select value={systemType} onChange={e => setSystemType(e.target.value)}>
+          <option value="DC">DC</option>
+          <option value="single-phase">Միաֆազ AC</option>
+          <option value="three-phase">Եռաֆազ AC</option>
+        </select>
+      </div>
+      <div className="input-group">
+        <label>Աղբյուրի լարում (Վ)</label>
+        <input type="number" value={voltage} onChange={e => setVoltage(Number(e.target.value))} />
+      </div>
+      <div className="input-group">
+        <label>Թույլատր. լարման անկում (%)</label>
+        <input type="number" value={voltageDropPercent} onChange={e => setVoltageDropPercent(Number(e.target.value))} />
+      </div>
+      <div className="input-group">
+        <label>Հաղորդիչի նյութ</label>
+        <select value={material} onChange={e => setMaterial(e.target.value)}>
+          <option value="copper">Պղինձ</option>
+          <option value="aluminum">Ալյումին</option>
+        </select>
+      </div>
+      <div className="input-group">
+        <label>Հոսանք (Ա)</label>
+        <input type="number" value={current} onChange={e => setCurrent(Number(e.target.value))} />
+      </div>
+      <div className="input-group">
+        <label>One-way հեռավորություն (մ)</label>
+        <input type="number" value={distance} onChange={e => setDistance(Number(e.target.value))} />
+      </div>
+      <div className="input-group">
+        <label>Լարի առավելագույն ջերմաստիճան (°C)</label>
+        <input type="number" value={maxTemp} onChange={e => setMaxTemp(Number(e.target.value))} />
+      </div>
       <div className="input-group">
         <label>Լարի տեսակը (մմ²)</label>
         <select value={wireType} onChange={e => setWireType(e.target.value)}>
@@ -101,42 +131,54 @@ const ElectricWiresCalculator = () => {
         </select>
       </div>
 
-      {rooms.map((room, index) => (
-        <div key={index} className="room-box">
-          <h4>Սենյակ {index + 1}</h4>
-          <div className="input-pair">
+      {rooms.map((room, idx) => (
+        <div key={idx} className="room-box">
+          <h4>Սենյակ {idx + 1}</h4>
+          <div className="room-inputs">
             <label>Երկարություն (մ)</label>
-            <input type="number" value={room.length} onChange={e => handleRoomChange(index, 'length', e.target.value)} />
+            <input
+              type="number"
+              value={room.length}
+              onChange={e => handleRoomChange(idx, 'length', e.target.value)}
+            />
             <label>Լայնություն (մ)</label>
-            <input type="number" value={room.width} onChange={e => handleRoomChange(index, 'width', e.target.value)} />
-          </div>
-
-          <div className="input-pair">
+            <input
+              type="number"
+              value={room.width}
+              onChange={e => handleRoomChange(idx, 'width', e.target.value)}
+            />
             <label>Վարդակների քանակ</label>
-            <input type="number" value={room.sockets} onChange={e => handleRoomChange(index, 'sockets', e.target.value)} />
+            <input
+              type="number"
+              value={room.sockets}
+              onChange={e => handleRoomChange(idx, 'sockets', e.target.value)}
+            />
             <label>Անջատիչների քանակ</label>
-            <input type="number" value={room.switches} onChange={e => handleRoomChange(index, 'switches', e.target.value)} />
+            <input
+              type="number"
+              value={room.switches}
+              onChange={e => handleRoomChange(idx, 'switches', e.target.value)}
+            />
           </div>
-
-          <div className="appliance-list">
-            <h5>Էլեկտրասարքեր</h5>
-            {room.appliances.map((appliance, applianceIndex) => (
-              <div key={applianceIndex} className="input-pair">
+          <div className="appliances">
+            <h5>Սարքեր</h5>
+            {room.appliances.map((appliance, aIdx) => (
+              <div key={aIdx} className="appliance-item">
                 <input
                   type="text"
-                  placeholder="Օրինակ՝ Լամպ"
+                  placeholder="Անուն"
                   value={appliance.name}
-                  onChange={e => handleApplianceChange(index, applianceIndex, 'name', e.target.value)}
+                  onChange={e => handleApplianceChange(idx, aIdx, 'name', e.target.value)}
                 />
                 <input
                   type="number"
-                  placeholder="հզորություն (W)"
+                  placeholder="Հզորություն (Վտ)"
                   value={appliance.power}
-                  onChange={e => handleApplianceChange(index, applianceIndex, 'power', e.target.value)}
+                  onChange={e => handleApplianceChange(idx, aIdx, 'power', e.target.value)}
                 />
               </div>
             ))}
-            <button onClick={() => addAppliance(index)}>➕ Ավելացնել սարք</button>
+            <button onClick={() => addAppliance(idx)}>➕ Ավելացնել սարք</button>
           </div>
         </div>
       ))}
@@ -146,11 +188,13 @@ const ElectricWiresCalculator = () => {
 
       {result && (
         <>
-          <div className="result">
-            <p><strong>Ընդհանուր լարի երկարություն՝</strong> {result.totalLength} մետր</p>
-            <p><strong>Ընդհանուր հզորություն՝</strong> {result.totalPower} Վատտ</p>
+          <div className="result" ref={resultRef}>
+            <p><strong>Ընդ. լարի երկարություն՝</strong> {result.totalLength} մ</p>
+            <p><strong>Ընդ. հզորություն՝</strong> {result.totalPower} Վտ</p>
+            <p><strong>Հաշված հատ./մմ²՝</strong> {result.area}</p>
+            <p><strong>Հաշված տրամագիծ՝</strong> {result.diameter} մմ</p>
           </div>
-          <button className="calculate-btn" onClick={downloadPDF}>📥 Ներբեռնել PDF</button>
+          <button className="calculate-btn" onClick={downloadImage}>📥 Ներբեռնել նկարի տեսքով</button>
         </>
       )}
     </div>

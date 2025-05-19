@@ -101,7 +101,7 @@ const PaintCalculator = () => {
                 checked={calcType === 'floor'}
                 onChange={() => setCalcType('floor')}
               />
-              Հատակ
+              Առաստաղ
             </label>
           </div>
 
