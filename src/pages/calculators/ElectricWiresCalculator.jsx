@@ -1,11 +1,14 @@
 import React, { useState, useRef } from 'react'
 import html2canvas from 'html2canvas'
 import '../../styles/ElectricWiresCalculator.css'
+import { useNavigate } from 'react-router-dom'
+
 
 const MATERIAL_RESISTIVITY = {
   copper: 1.68e-8,   // Ω·m
   aluminum: 2.65e-8  // Ω·m
 }
+
 
 const ElectricWiresCalculator = () => {
   const [rooms, setRooms] = useState([
@@ -20,6 +23,7 @@ const ElectricWiresCalculator = () => {
   const [current, setCurrent] = useState(10)
   const [distance, setDistance] = useState(20)
   const [maxTemp, setMaxTemp] = useState(75)
+  
 
   const [result, setResult] = useState(null)
   const resultRef = useRef(null)
@@ -31,6 +35,7 @@ const ElectricWiresCalculator = () => {
       : value
     setRooms(newRooms)
   }
+  
 
   const handleApplianceChange = (roomIndex, applianceIndex, field, value) => {
     const newRooms = [...rooms]
@@ -82,11 +87,19 @@ const ElectricWiresCalculator = () => {
       link.click()
     })
   }
+  const navigate = useNavigate()
 
   return (
     <div className="electric-wires-calculator">
-      <h2>Մանրակ. էլեկտր. լարերի հաշվիչ</h2>
 
+      <h2>Մանրակ. էլեկտր. լարերի հաշվիչ</h2>
+     <div className="breadcrumb">
+        <span onClick={() => navigate('/')}>🏠 Գլխավոր</span>
+        <span className="breadcrumb-separator">›</span>
+        <span onClick={() => navigate('/calculators')}>Շինարարական հաշվիչներ</span>
+        <span className="breadcrumb-separator">›</span>
+        <span className="current">Բետոնի ծավալի հաշվիչ</span>
+      </div>
       <div className="input-group">
         <label>Համակարգի տեսակը</label>
         <select value={systemType} onChange={e => setSystemType(e.target.value)}>

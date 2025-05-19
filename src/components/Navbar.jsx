@@ -1,9 +1,25 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/Navbar.css'
 import Logo from './Logo'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+
+  const handleLinkClick = (sectionId) => {
+    setMenuOpen(false)
+
+    // Նավիգացիա դեպի home, հետո scroll
+    navigate('/')
+
+    setTimeout(() => {
+      const section = document.getElementById(sectionId)
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' })
+      }
+    }, 100) // սպասում ենք, որ home load անի
+  }
 
   return (
     <nav className="navbar">
@@ -17,11 +33,13 @@ const Navbar = () => {
         <div className="line line3" />
       </div>
       <ul className={`navbar-links ${menuOpen ? 'open' : ''}`}>
-        <li><a href="#services">Ծառայություններ</a></li>
-        <li><a href="#portfolio">Պրոյեկտներ</a></li>
-        <li><a href="#about">Մեր Մասին</a></li>
-        <li><a href="#contact">Կապ</a></li>
-        <li><a href="/calculators">Հաշվիչներ</a></li> {/* ԱՅՍՏԵՂ ԱՎԵԼԱՑՎԱԾ Է */}
+        <li onClick={() => handleLinkClick('services')}>Ծառայություններ</li>
+        <li onClick={() => handleLinkClick('portfolio')}>Պրոյեկտներ</li>
+        <li onClick={() => handleLinkClick('about')}>Մեր Մասին</li>
+        <li onClick={() => handleLinkClick('contact')}>Կապ</li>
+        <li onClick={handleLinkClick}>
+          <a href="/calculators">Հաշվիչներ</a> {/* Մնում է հղում, քանի որ սա առանձին էջ է */}
+        </li>
       </ul>
     </nav>
   )
