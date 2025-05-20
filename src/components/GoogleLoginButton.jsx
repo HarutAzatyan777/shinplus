@@ -1,20 +1,24 @@
 import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE = 'https://shinplusserv-production.up.railway.app/auth';
 
 const GoogleLoginButton = () => {
+  const navigate = useNavigate();
+
   const handleSuccess = async credentialResponse => {
     try {
-      // credentialResponse.credential - սա Google-ից ստացված ID Token է
       const idToken = credentialResponse.credential;
 
-      // Ուղարկում ենք backend՝ վերիֆիկացնելու համար
-      const res = await axios.post(`${API_BASE}/google-login`, { idToken });
+      const res = await axios.post(`${API_BASE}/google`, { idToken });
 
       console.log('Backend response:', res.data);
       alert('Մուտքը հաջողվեց՝ ' + JSON.stringify(res.data));
+
+      // Երբ հաջող մուտք, տեղափոխում ենք /calculators
+      navigate('/calculators');
     } catch (error) {
       console.error('Google login error:', error.response?.data || error.message);
       alert('Մուտքը ձախողվեց');
