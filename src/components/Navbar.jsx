@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../styles/Navbar.css'
 import Logo from './Logo'
+import GoogleLoginButton from './GoogleLoginButton'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -40,6 +41,7 @@ const Navbar = () => {
         <li onClick={handleLinkClick}>
           <a href="/calculators">Հաշվիչներ</a> {/* Մնում է հղում, քանի որ սա առանձին էջ է */}
         </li>
+        <GoogleLoginButton />
       </ul>
     </nav>
   )
