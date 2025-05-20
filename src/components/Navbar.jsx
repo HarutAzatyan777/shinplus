@@ -41,7 +41,7 @@ const Navbar = () => {
         <li onClick={handleLinkClick}>
           <a href="/calculators">Հաշվիչներ</a> {/* Մնում է հղում, քանի որ սա առանձին էջ է */}
         </li>
-        <GoogleLoginButton />
+        {/* <GoogleLoginButton /> */}
       </ul>
     </nav>
   )
