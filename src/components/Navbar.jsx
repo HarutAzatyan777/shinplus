@@ -1,25 +1,35 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { logout } from '../redux/authSlice'
 import '../styles/Navbar.css'
 import Logo from './Logo'
-import GoogleLoginButton from './GoogleLoginButton'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
 
   const handleLinkClick = (sectionId) => {
     setMenuOpen(false)
-
-    // Նավիգացիա դեպի home, հետո scroll
     navigate('/')
-
     setTimeout(() => {
       const section = document.getElementById(sectionId)
       if (section) {
         section.scrollIntoView({ behavior: 'smooth' })
       }
-    }, 100) // սպասում ենք, որ home load անի
+    }, 100)
+  }
+
+  const handleLoginClick = () => {
+    setMenuOpen(false)
+    navigate('/login')
+  }
+
+  const handleLogout = () => {
+    dispatch(logout())
+    navigate('/')
   }
 
   return (
@@ -38,10 +48,14 @@ const Navbar = () => {
         <li onClick={() => handleLinkClick('portfolio')}>Պրոյեկտներ</li>
         <li onClick={() => handleLinkClick('about')}>Մեր Մասին</li>
         <li onClick={() => handleLinkClick('contact')}>Կապ</li>
-        <li onClick={handleLinkClick}>
-          <a href="/calculators">Հաշվիչներ</a> {/* Մնում է հղում, քանի որ սա առանձին էջ է */}
+        <li>
+          <a href="/calculators">Հաշվիչներ</a>
         </li>
-        {/* <GoogleLoginButton /> */}
+        {isLoggedIn ? (
+          <li onClick={handleLogout} className="login-button">Ելք</li>
+        ) : (
+          <li onClick={handleLoginClick} className="login-button">Մուտք</li>
+        )}
       </ul>
     </nav>
   )
