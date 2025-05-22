@@ -27,6 +27,7 @@ export const fetchUsersAPI = async () => {
   const token = localStorage.getItem('token');
   return axios.get(`${ADMIN_BASE}/users`, {
     headers: { Authorization: `Bearer ${token}` },
+    withCredentials: true,
   });
 };
 
