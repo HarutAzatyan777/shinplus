@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { loginSuccess, logout } from '../redux/authSlice';
-import { registerUser, loginUser } from '../api';
+import { registerUser, loginUser } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import '../styles/AuthForm.css';
 

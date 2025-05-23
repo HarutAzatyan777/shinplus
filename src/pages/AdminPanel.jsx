@@ -1,7 +1,8 @@
 // src/components/AdminPanel.jsx
 import React, { useEffect, useState, useCallback } from 'react';
-import { fetchUsersAPI, deleteUserAPI, updateUserRoleAPI } from '../api';
+import { fetchUsersAPI, deleteUserAPI, updateUserRoleAPI } from '../api/api';
 import '../styles/AdminPanel.css'; // ստանդարտ css
+import MakeAdmin from '../components/MakeAdmin';
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
@@ -119,6 +120,7 @@ const AdminPanel = () => {
           </table>
         </>
       )}
+      <MakeAdmin />
     </div>
   );
 };
