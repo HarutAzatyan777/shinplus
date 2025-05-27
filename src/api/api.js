@@ -3,13 +3,13 @@ import axios from 'axios';
 // Base URL-ը ընտրում ենք ըստ NODE_ENV-ի կամ կարող ես ձեռքով փոխել
 const API_BASE =
   process.env.NODE_ENV === 'production'
-    ? 'https://shinplusserv-production.up.railway.app/auth'
+    ? 'https://shinplusserv-production.up.railway.app/api/auth'
     : 'http://localhost:5000/api/auth';
 
 // Admin մասի համար նույնպես
 const ADMIN_BASE =
   process.env.NODE_ENV === 'production'
-    ? 'https://shinplusserv-production.up.railway.app/auth/admin'
+    ? 'https://shinplusserv-production.up.railway.app/api/auth/admin'
     : 'http://localhost:5000/auth/api/admin';
 
 // Գրանցում
