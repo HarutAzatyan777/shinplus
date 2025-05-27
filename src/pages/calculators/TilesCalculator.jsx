@@ -1,165 +1,170 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import axiosInstance from '../../api/axiosInstance';
 
-const TilesCalculator = () => {
-  const navigate = useNavigate()
+const TilesCalculatorPage = () => {
+  // ...հիմնական state-ները, handleChange, handleSubmit ...
+  // Այս պահին օգտագործում ենք axiosInstance-ը բոլոր հարցումների համար
 
-  const [floorLength, setFloorLength] = useState('')
-  const [floorWidth, setFloorWidth] = useState('')
-  const [wallHeight, setWallHeight] = useState('')
-  const [wallWidth, setWallWidth] = useState('')
-  const [tileHeight, setTileHeight] = useState('')
-  const [tileWidth, setTileWidth] = useState('')
-  const [spacing, setSpacing] = useState('')
-  const [pricePerTile, setPricePerTile] = useState('')
-  const [currency, setCurrency] = useState('AMD')
+  const [form, setForm] = useState({
+    floorLengthMeters: '',
+    floorWidthMeters: '',
+    wallLengthMeters: '',
+    wallHeightMeters: '',
+    tileLengthCm: '',
+    tileWidthCm: '',
+    groutCm: '',
+    tilePrice: '',
+  });
 
-  const [floorTilesNeeded, setFloorTilesNeeded] = useState(null)
-  const [wallTilesNeeded, setWallTilesNeeded] = useState(null)
-  const [floorCost, setFloorCost] = useState(null)
-  const [wallCost, setWallCost] = useState(null)
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const calculateTiles = () => {
-    // Գտնենք հատակի մակերեսը մետրերով
-    const floorArea = parseFloat(floorLength) * parseFloat(floorWidth)
-    // Պատի մակերեսը
-    const wallArea = parseFloat(wallHeight) * parseFloat(wallWidth)
-
-    // Սալիկի մակերեսը սանտիմետրերով (բացվածքն ընդգրկված)
-    const tileHeightWithSpacing = parseFloat(tileHeight) + parseFloat(spacing)
-    const tileWidthWithSpacing = parseFloat(tileWidth) + parseFloat(spacing)
-
-    // Սալիկի մակերեսը մ^2
-    const tileArea = (tileHeightWithSpacing * tileWidthWithSpacing) / 10000 // սմ2 => մ2
-
-    if (
-      isNaN(floorArea) || isNaN(wallArea) ||
-      isNaN(tileArea) || tileArea === 0 ||
-      isNaN(parseFloat(pricePerTile))
-    ) {
-      alert('Խնդրում եմ մուտքագրեք բոլոր անհրաժեշտ արժեքները ճիշտ ձևաչափով։')
-      return
+  const fetchHistory = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get('/my-history');
+      setHistory(res.data);
+      setError(null);
+    } catch (err) {
+      setError('Չհաջողվեց բեռնել history-ն');
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const floorTiles = Math.ceil(floorArea / tileArea)
-    const wallTiles = Math.ceil(wallArea / tileArea)
+  useEffect(() => {
+    fetchHistory();
+  }, []);
 
-    setFloorTilesNeeded(floorTiles)
-    setWallTilesNeeded(wallTiles)
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
 
-    setFloorCost(floorTiles * parseFloat(pricePerTile))
-    setWallCost(wallTiles * parseFloat(pricePerTile))
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const body = {
+        floorLengthMeters: parseFloat(form.floorLengthMeters),
+        floorWidthMeters: parseFloat(form.floorWidthMeters),
+        wallLengthMeters: parseFloat(form.wallLengthMeters),
+        wallHeightMeters: parseFloat(form.wallHeightMeters),
+        tileLengthCm: parseFloat(form.tileLengthCm),
+        tileWidthCm: parseFloat(form.tileWidthCm),
+        groutCm: parseFloat(form.groutCm),
+        tilePrice: parseFloat(form.tilePrice),
+      };
+
+      const res = await axiosInstance.post('/', body);
+      alert(`Հաշվարկ ստեղծվեց։ Տակտալ՝ ${res.data.tilesNeeded} հատ, Ընդհանուր արժեք՝ ${res.data.totalPrice}։`);
+      fetchHistory();
+      setForm({
+        floorLengthMeters: '',
+        floorWidthMeters: '',
+        wallLengthMeters: '',
+        wallHeightMeters: '',
+        tileLengthCm: '',
+        tileWidthCm: '',
+        groutCm: '',
+        tilePrice: '',
+      });
+      setError(null);
+    } catch (err) {
+      setError('Չհաջողվեց ստեղծել հաշվարկը');
+      console.error(err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Համոզվա՞ծ եք, որ ուզում եք ջնջել։')) return;
+
+    try {
+      await axiosInstance.delete(`/${id}`);
+      alert('Ջնջվեց։');
+      fetchHistory();
+    } catch (err) {
+      setError('Չհաջողվեց ջնջել');
+      console.error(err);
+    }
+  };
+
+  const handleLike = async (id) => {
+    try {
+      await axiosInstance.put(`/${id}/like`);
+      alert('Like ավելացավ։');
+      fetchHistory();
+    } catch (err) {
+      setError('Չհաջողվեց ավելացնել like');
+      console.error(err);
+    }
+  };
 
   return (
-    <div className="tiles-calculator">
-      <div className="breadcrumb">
-        <span onClick={() => navigate('/')}>🏠 Գլխավոր</span>
-        <span className="breadcrumb-separator">›</span>
-        <span onClick={() => navigate('/calculators')}>Շինարարական հաշվիչներ</span>
-        <span className="breadcrumb-separator">›</span>
-        <span className="current">Սալիկների հաշվիչ՝ հատակի և պատերի համար</span>
-      </div>
+    <div style={{ maxWidth: 600, margin: 'auto' }}>
+      <h1>Տաշերի հաշվիչ</h1>
 
-      <h2>Սալիկների հաշվիչ՝ հատակի և պատերի համար</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {/* Info Section */}
-      <div
-        className="info-section"
-        style={{
-          backgroundColor: '#eef6ff',
-          padding: '10px',
-          borderRadius: '5px',
-          marginBottom: '15px',
-        }}
-      >
-        <h4>Ինֆորմացիա</h4>
-        <p>
-          Սալիկների միջև բացվածքը կարևոր է հաշվի առնել, քանի որ դա ապահովում է սալիկների ճիշտ տեղավորումը, թույլ է տալիս լրացնել համընկնող նյութերը (փոսիկները) և կանխում է ճաքերի առաջացումը: Այս բացվածքը սովորաբար հաշվվում է սանտիմետրերով և պետք է ներառվի ընդհանուր սալիկների տարածքի հաշվարկում՝ ավելի ճշգրիտ արդյունքի համար:
-        </p>
-      </div>
+      <form onSubmit={handleSubmit} style={{ marginBottom: 30 }}>
+        {Object.entries(form).map(([key, value]) => (
+          <div key={key} style={{ marginBottom: 10 }}>
+            <label htmlFor={key} style={{ display: 'block', fontWeight: 'bold' }}>
+              {key}:
+            </label>
+            <input
+              id={key}
+              name={key}
+              type="number"
+              step="any"
+              value={value}
+              onChange={handleChange}
+              required
+              style={{ width: '100%', padding: 8 }}
+            />
+          </div>
+        ))}
 
-      <p>
-        Մուտքագրեք չափսերը՝ հատակի համար մետրերով, պատերի համար մետրերով, սալիկի չափսերը՝ սանտիմետրերով, սալիկների միջև բացվածքը՝ սանտիմետրերով, և սալիկի միավոր գինը՝ դրամով կամ դոլարով:
-      </p>
+        <button type="submit" style={{ padding: '10px 15px', fontWeight: 'bold' }}>
+          Հաշվել
+        </button>
+      </form>
 
-      <div className="section">
-        <h3>Հատակի չափսեր (մ)</h3>
-        <div className="input-group">
-          <label>Երկարություն</label>
-          <input type="number" value={floorLength} onChange={(e) => setFloorLength(e.target.value)} />
-        </div>
-        <div className="input-group">
-          <label>Լայնություն</label>
-          <input type="number" value={floorWidth} onChange={(e) => setFloorWidth(e.target.value)} />
-        </div>
-      </div>
+      <h2>Իմ Հաշվարկները</h2>
 
-      <div className="section">
-        <h3>Պատի չափսեր (մ)</h3>
-        <div className="input-group">
-          <label>Բարձրություն</label>
-          <input type="number" value={wallHeight} onChange={(e) => setWallHeight(e.target.value)} />
-        </div>
-        <div className="input-group">
-          <label>Լայնություն</label>
-          <input type="number" value={wallWidth} onChange={(e) => setWallWidth(e.target.value)} />
-        </div>
-      </div>
-
-      <div className="section">
-        <h3>Սալիկի չափսեր (սմ)</h3>
-        <div className="input-group">
-          <label>Բարձրություն</label>
-          <input type="number" value={tileHeight} onChange={(e) => setTileHeight(e.target.value)} />
-        </div>
-        <div className="input-group">
-          <label>Լայնություն</label>
-          <input type="number" value={tileWidth} onChange={(e) => setTileWidth(e.target.value)} />
-        </div>
-        <div className="input-group">
-          <label>Սալիկների միջև բացվածք (սմ)</label>
-          <input type="number" value={spacing} onChange={(e) => setSpacing(e.target.value)} />
-        </div>
-      </div>
-
-      <div className="section">
-        <h3>Գին և արժույթ</h3>
-        <div className="input-group">
-          <label>Սալիկի միավոր գին</label>
-          <input type="number" value={pricePerTile} onChange={(e) => setPricePerTile(e.target.value)} />
-        </div>
-        <div className="input-group">
-          <label>Արժույթ</label>
-          <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
-            <option value="AMD">Դրամ (AMD)</option>
-            <option value="USD">Դոլար (USD)</option>
-          </select>
-        </div>
-      </div>
-
-      <button className="calculate-button" onClick={calculateTiles}>
-        Հաշվել
-      </button>
-
-      {(floorTilesNeeded !== null || wallTilesNeeded !== null) && (
-        <div className="result" style={{ marginTop: '20px' }}>
-          {floorTilesNeeded !== null && (
-            <p>
-              Հատակի համար անհրաժեշտ սալիկների քանակը՝ <strong>{floorTilesNeeded} հատ</strong>
-              {floorCost !== null && ` (~${floorCost.toFixed(2)} ${currency})`}
-            </p>
-          )}
-          {wallTilesNeeded !== null && (
-            <p>
-              Պատերի համար անհրաժեշտ սալիկների քանակը՝ <strong>{wallTilesNeeded} հատ</strong>
-              {wallCost !== null && ` (~${wallCost.toFixed(2)} ${currency})`}
-            </p>
-          )}
-        </div>
+      {loading ? (
+        <p>Բեռնում...</p>
+      ) : history.length === 0 ? (
+        <p>Դատարկ է</p>
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {history.map(calc => (
+            <li
+              key={calc._id}
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: 6,
+                padding: 15,
+                marginBottom: 10,
+              }}
+            >
+              <div><b>ID:</b> {calc._id}</div>
+              <div><b>Tiles Needed:</b> {calc.tilesNeeded}</div>
+              <div><b>Total Price:</b> {calc.totalPrice} AMD</div>
+              <div><b>Created At:</b> {new Date(calc.createdAt).toLocaleString()}</div>
+              <button onClick={() => handleLike(calc._id)} style={{ marginRight: 10 }}>
+                👍 Like
+              </button>
+              <button onClick={() => handleDelete(calc._id)} style={{ color: 'red' }}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default TilesCalculator
+export default TilesCalculatorPage;

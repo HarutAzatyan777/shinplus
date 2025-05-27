@@ -4,13 +4,13 @@ import axios from 'axios';
 const API_BASE =
   process.env.NODE_ENV === 'production'
     ? 'https://shinplusserv-production.up.railway.app/auth'
-    : 'http://localhost:5000/auth';
+    : 'http://localhost:5000/api/auth';
 
 // Admin մասի համար նույնպես
 const ADMIN_BASE =
   process.env.NODE_ENV === 'production'
     ? 'https://shinplusserv-production.up.railway.app/auth/admin'
-    : 'http://localhost:5000/auth/admin';
+    : 'http://localhost:5000/auth/api/admin';
 
 // Գրանցում
 export const registerUser = async (email, password) => {
