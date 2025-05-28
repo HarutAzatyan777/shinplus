@@ -7,9 +7,11 @@ import store from './redux/store' // համոզվիր, որ ուղին ճիշտ 
 function App() {
   return (
     <Provider store={store}>
+      
       <Router>
         <AppRouter />
       </Router>
+      
     </Provider>
   )
 }

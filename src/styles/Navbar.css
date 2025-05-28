@@ -76,6 +76,21 @@
 .burger.open .line3 {
   transform: rotate(-45deg) translate(5px, -5px);
 }
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.navbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #333;
+}
+
 
 /* Mobile nav */
 @media (max-width: 768px) {

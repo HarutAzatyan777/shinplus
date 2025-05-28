@@ -17,7 +17,7 @@ const AccountPage = () => {
 
   return (
     <div className="construction-site">
-      <h1>Բարի գալուստ {user?.email || 'Օգտատեր'} 👷‍♂️</h1>
+      <h1>Բարի գալուստ {user?.username  || 'Օգտատեր'} 👷‍♂️</h1>
       <Notes />
       <button className="logout-btn" onClick={handleLogout}>Ելք</button>
     </div>

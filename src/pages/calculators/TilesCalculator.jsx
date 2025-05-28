@@ -1,50 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import axiosInstance from '../../api/axiosInstance';
+import React, { useState, useEffect } from 'react'
+import axiosInstance from '../../api/axiosInstance'
 
 const TilesCalculatorPage = () => {
-  // ...հիմնական state-ները, handleChange, handleSubmit ...
-  // Այս պահին օգտագործում ենք axiosInstance-ը բոլոր հարցումների համար
-
   const [form, setForm] = useState({
-    floorLengthMeters: '',
-    floorWidthMeters: '',
-    wallLengthMeters: '',
-    wallHeightMeters: '',
-    tileLengthCm: '',
-    tileWidthCm: '',
-    groutCm: '',
-    tilePrice: '',
-  });
+    floorLengthMeters: 5,      // Հատակ — երկարություն (մետր)
+    floorWidthMeters: 4,       // Հատակ — լայնություն (մետր)
+    wallLengthMeters: 10,      // Պատ — երկարություն (մետր)
+    wallHeightMeters: 3,       // Պատ — բարձրություն (մետր)
+    tileLengthCm: 30,          // Սալիկի երկարություն (սմ)
+    tileWidthCm: 30,           // Սալիկի լայնություն (սմ)
+    groutCm: 0.5,              // Հարակցման բաց (սմ)
+    tilePrice: 1500,           // Սալիկի գին (դրամ)
+  })
 
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [history, setHistory] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const fetchHistory = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const res = await axiosInstance.get('/my-history');
-      setHistory(res.data);
-      setError(null);
+      const res = await axiosInstance.get('/my-history')
+      setHistory(res.data)
+      setError(null)
     } catch (err) {
-      setError('Չհաջողվեց բեռնել history-ն');
-      console.error(err);
+      setError('Չհաջողվեց բեռնել պատմությունը')
+      console.error(err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    fetchHistory();
-  }, []);
+    fetchHistory()
+  }, [])
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
+    const { name, value } = e.target
+    setForm(prev => ({ ...prev, [name]: value }))
+  }
+
+  const clearMessages = () => {
+    setError(null)
+    setSuccessMessage(null)
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    clearMessages()
+
     try {
       const body = {
         floorLengthMeters: parseFloat(form.floorLengthMeters),
@@ -55,63 +60,102 @@ const TilesCalculatorPage = () => {
         tileWidthCm: parseFloat(form.tileWidthCm),
         groutCm: parseFloat(form.groutCm),
         tilePrice: parseFloat(form.tilePrice),
-      };
+      }
 
-      const res = await axiosInstance.post('/', body);
-      alert(`Հաշվարկ ստեղծվեց։ Տակտալ՝ ${res.data.tilesNeeded} հատ, Ընդհանուր արժեք՝ ${res.data.totalPrice}։`);
-      fetchHistory();
+      const res = await axiosInstance.post('/', body)
+
+      setSuccessMessage(`Հաշվարկը հաջողությամբ ստեղծվեց։ Անհրաժեշտ Սալիկի՝ ${res.data.tilesNeeded} հատ, Ընդհանուր արժեք՝ ${res.data.totalPrice} դրամ։`)
+
+      fetchHistory()
       setForm({
-        floorLengthMeters: '',
-        floorWidthMeters: '',
-        wallLengthMeters: '',
-        wallHeightMeters: '',
-        tileLengthCm: '',
-        tileWidthCm: '',
-        groutCm: '',
-        tilePrice: '',
-      });
-      setError(null);
+        floorLengthMeters: 5,
+        floorWidthMeters: 4,
+        wallLengthMeters: 10,
+        wallHeightMeters: 3,
+        tileLengthCm: 30,
+        tileWidthCm: 30,
+        groutCm: 0.5,
+        tilePrice: 1500,
+      })
+
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 5000)
+
     } catch (err) {
-      setError('Չհաջողվեց ստեղծել հաշվարկը');
-      console.error(err);
+      setError('Չհաջողվեց ստեղծել հաշվարկը')
+      console.error(err)
     }
-  };
+  }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Համոզվա՞ծ եք, որ ուզում եք ջնջել։')) return;
+    clearMessages()
+    if (!window.confirm('Համոզվա՞ծ եք, որ ցանկանում եք ջնջել։')) return
 
     try {
-      await axiosInstance.delete(`/${id}`);
-      alert('Ջնջվեց։');
-      fetchHistory();
+      await axiosInstance.delete(`/${id}`)
+      setSuccessMessage('Հաշվարկը ջնջվեց։')
+      fetchHistory()
+
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 3000)
+
     } catch (err) {
-      setError('Չհաջողվեց ջնջել');
-      console.error(err);
+      setError('Չհաջողվեց ջնջել հաշվարկը')
+      console.error(err)
     }
-  };
+  }
 
   const handleLike = async (id) => {
+    clearMessages()
     try {
-      await axiosInstance.put(`/${id}/like`);
-      alert('Like ավելացավ։');
-      fetchHistory();
+      await axiosInstance.put(`/${id}/like`)
+      setSuccessMessage('Հաշվարկը հավանվեց։')
+      fetchHistory()
+
+      setTimeout(() => {
+        setSuccessMessage(null)
+      }, 3000)
+
     } catch (err) {
-      setError('Չհաջողվեց ավելացնել like');
-      console.error(err);
+      setError('Չհաջողվեց ավելացնել հավանումը')
+      console.error(err)
     }
-  };
+  }
+
+  const labels = {
+    floorLengthMeters: 'Հատակ — երկարություն (մետր)',
+    floorWidthMeters: 'Հատակ — լայնություն (մետր)',
+    wallLengthMeters: 'Պատ — երկարություն (մետր)',
+    wallHeightMeters: 'Պատ — բարձրություն (մետր)',
+    tileLengthCm: 'Սալիկի երկարություն (սմ)',
+    tileWidthCm: 'Սալիկի լայնություն (սմ)',
+    groutCm: 'Հարակցման բաց (սմ)',
+    tilePrice: 'Սալիկի գին (դրամ)',
+  }
 
   return (
     <div style={{ maxWidth: 600, margin: 'auto' }}>
-      <h1>Տաշերի հաշվիչ</h1>
+      <h1>Սալիկի հաշվիչ</h1>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {successMessage && (
+        <div style={{ backgroundColor: '#d4edda', color: '#155724', padding: '10px 15px', borderRadius: 4, marginBottom: 20, border: '1px solid #c3e6cb' }}>
+          {successMessage}
+        </div>
+      )}
+
+      {error && (
+        <div style={{ backgroundColor: '#f8d7da', color: '#721c24', padding: '10px 15px', borderRadius: 4, marginBottom: 20, border: '1px solid #f5c6cb' }}>
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{ marginBottom: 30 }}>
         {Object.entries(form).map(([key, value]) => (
           <div key={key} style={{ marginBottom: 10 }}>
             <label htmlFor={key} style={{ display: 'block', fontWeight: 'bold' }}>
-              {key}:
+              {labels[key]}:
             </label>
             <input
               id={key}
@@ -131,12 +175,12 @@ const TilesCalculatorPage = () => {
         </button>
       </form>
 
-      <h2>Իմ Հաշվարկները</h2>
+      <h2>Իմ հաշվարկները</h2>
 
       {loading ? (
         <p>Բեռնում...</p>
       ) : history.length === 0 ? (
-        <p>Դատարկ է</p>
+        <p>Դատարկ է, դեռ հաշվարկ չունեք։</p>
       ) : (
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {history.map(calc => (
@@ -149,22 +193,22 @@ const TilesCalculatorPage = () => {
                 marginBottom: 10,
               }}
             >
-              <div><b>ID:</b> {calc._id}</div>
-              <div><b>Tiles Needed:</b> {calc.tilesNeeded}</div>
-              <div><b>Total Price:</b> {calc.totalPrice} AMD</div>
-              <div><b>Created At:</b> {new Date(calc.createdAt).toLocaleString()}</div>
+              {/* <div><b>ID:</b> {calc._id}</div> */}
+              <div><b>Անհրաժեշտ Սալիկի:</b> {calc.tilesNeeded} հատ</div>
+              <div><b>Ընդհանուր արժեք:</b> {calc.totalPrice} դրամ</div>
+              <div><b>Ստեղծման ամսաթիվ:</b> {new Date(calc.createdAt).toLocaleString()}</div>
               <button onClick={() => handleLike(calc._id)} style={{ marginRight: 10 }}>
-                👍 Like
+                👍 Հավանել
               </button>
               <button onClick={() => handleDelete(calc._id)} style={{ color: 'red' }}>
-                Delete
+                Ջնջել
               </button>
             </li>
           ))}
         </ul>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default TilesCalculatorPage;
+export default TilesCalculatorPage

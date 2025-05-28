@@ -23,7 +23,7 @@ const LoginPage = () => {
         )}
 
         <div className="google-button-wrapper">
-          <GoogleLoginButton />
+          {/* <GoogleLoginButton /> */}
         </div>
       </div>
     </div>

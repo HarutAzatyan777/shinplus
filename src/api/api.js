@@ -12,9 +12,13 @@ const ADMIN_BASE =
     ? 'https://shinplusserv-production.up.railway.app/api/auth/admin'
     : 'http://localhost:5000/auth/api/admin';
 
-// Գրանցում
-export const registerUser = async (email, password) => {
-  return axios.post(`${API_BASE}/register`, { email, password });
+// Գրանցում (✅ ընդունում է օբյեկտ՝ email, password, name, username, image)
+export const registerUser = async (userData) => {
+  return axios.post(`${API_BASE}/register`, userData);
+};
+
+export const resendVerificationEmail = async (email) => {
+  return axios.post(`${API_BASE}/resend-verification`, { email });
 };
 
 // Լոգին
