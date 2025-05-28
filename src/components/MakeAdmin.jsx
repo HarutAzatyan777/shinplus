@@ -13,7 +13,7 @@ const MakeAdmin = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/make-admin', {
+      const response = await axios.post('http://localhost:5000/make-admin', {
         email,
         adminSecret,
       });
