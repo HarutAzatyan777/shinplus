@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NotesList from '../components/NotesList';
-
+import '../styles/Notes.css';
 
 import {
   fetchNotesAPI,
@@ -69,9 +69,9 @@ const Notes = () => {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-      <h2 style={{ textAlign: 'center' }}>My Notes</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div className="notes-container">
+      <h2>My Notes</h2>
+      <form onSubmit={handleSubmit} className="notes-form">
         <input
           type="text"
           placeholder="Title"
@@ -117,7 +117,7 @@ const Notes = () => {
           />
         </label>
 
-        <button type="submit" style={{ padding: '8px 16px' }}>
+        <button type="submit">
           {form._id ? 'Update Note' : 'Create Note'}
         </button>
       </form>
