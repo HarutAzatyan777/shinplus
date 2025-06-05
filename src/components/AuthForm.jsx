@@ -139,10 +139,12 @@ const AuthForm = () => {
     try {
       const res = await loginUser(email, password);
       localStorage.setItem('token', res.data.token);
+  
       dispatch(
         loginSuccess({
           token: res.data.token,
           user: {
+            uid: res.data.user?.uid || '', // ✅ Ավելացրու uid այստեղ
             email,
             profilePicture: res.data.user?.profilePicture || null,
             name: res.data.user?.name || '',
@@ -150,6 +152,7 @@ const AuthForm = () => {
           },
         })
       );
+  
       setMessage('');
       setMessageType('');
       setShowResend(false);
@@ -165,6 +168,7 @@ const AuthForm = () => {
       setLoading(false);
     }
   };
+  
 
   const handleResendVerification = async () => {
     setLoading(true);

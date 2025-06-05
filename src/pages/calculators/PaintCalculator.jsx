@@ -1,215 +1,123 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import '../../styles/PaintCalculator.css'
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import paintCalculatorApi from '../../api/paintCalculator';
+import '../../styles/PaintCalculator.css';
 
 const PaintCalculator = () => {
-  const navigate = useNavigate()
+  const { user } = useSelector((state) => state.auth); // ստանում ենք օգտատիրոջ ID-ն
 
-  const [calcType, setCalcType] = useState('wall') // wall կամ floor
-  const [inputMode, setInputMode] = useState('dimensions') // dimensions կամ area
+  console.log('👉 user from Redux:', user); // ✅ Այստեղ ստուգում ենք user-ը
 
-  const [length, setLength] = useState('') // մ
-  const [widthOrHeight, setWidthOrHeight] = useState('') // մ
-  const [area, setArea] = useState('') // մ²
+  const [roomData, setRoomData] = useState({
+    length: '',
+    width: '',
+    height: '',
+    coveragePerLiter: 12, // default արժեք, կարող է փոփոխվել
+  });
 
-  const [coats, setCoats] = useState(1) // շերտերի քանակը
-  const [coverage, setCoverage] = useState('12') // մ²/լ, գունավորման ծածկույթ (օրինակ՝ 10, 12, 14)
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
-  const [result, setResult] = useState(null)
+  const handleChange = (e) => {
+    setRoomData({ ...roomData, [e.target.name]: e.target.value });
+  };
 
-  const calculatePaint = () => {
-    let totalArea = 0
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-    if (inputMode === 'dimensions') {
-      const l = parseFloat(length)
-      const w = parseFloat(widthOrHeight)
-      if (isNaN(l) || isNaN(w) || l <= 0 || w <= 0) {
-        alert('Խնդրում ենք մուտքագրել ճիշտ չափսեր։')
-        return
-      }
-      totalArea = l * w
-    } else if (inputMode === 'area') {
-      const a = parseFloat(area)
-      if (isNaN(a) || a <= 0) {
-        alert('Խնդրում ենք մուտքագրել ճիշտ մակերես։')
-        return
-      }
-      totalArea = a
+    console.log('📦 Submitted room data:', roomData);
+
+    if (!user?.uid) {
+      console.warn('⚠️ User not logged in or uid missing');
+      setError('Մուտք գործեք՝ օգտագործելու համար։');
+      return;
     }
 
-    if (totalArea <= 0) {
-      alert('Մակերեսը պետք է լինի մեծ 0-ից։')
-      return
+    const payload = {
+      ...roomData,
+      length: parseFloat(roomData.length),
+      width: parseFloat(roomData.width),
+      height: parseFloat(roomData.height),
+      coveragePerLiter: parseFloat(roomData.coveragePerLiter),
+      user: user.uid,
+    };
+
+    console.log('📤 Payload to API:', payload);
+
+    try {
+      const res = await paintCalculatorApi.post('/', payload);
+      console.log('✅ Response from API:', res.data);
+      setResult(res.data); // ենթադրում ենք՝ `{ paintLiters: number }`
+    } catch (err) {
+      console.error('❌ Error calculating paint:', err);
+      setError('Չհաջողվեց հաշվարկել ներկի քանակը։');
     }
-
-    const c = parseFloat(coats)
-    if (isNaN(c) || c < 1) {
-      alert('Խնդրում ենք մուտքագրել ճիշտ շերտերի քանակ։')
-      return
-    }
-
-    const cov = parseFloat(coverage)
-    if (isNaN(cov) || cov <= 0) {
-      alert('Խնդրում ենք մուտքագրել ճիշտ ծածկույթ։')
-      return
-    }
-
-    const totalCoverageArea = totalArea * c
-    const litersNeeded = totalCoverageArea / cov
-
-    setResult({
-      area: totalCoverageArea.toFixed(2),
-      liters: litersNeeded.toFixed(2),
-    })
-  }
+  };
 
   return (
     <div className="paint-calculator">
-      <div className="breadcrumb">
-        <span onClick={() => navigate('/')}>🏠 Գլխավոր</span>
-        <span className="breadcrumb-separator">›</span>
-        <span onClick={() => navigate('/calculators')}>Շինարարական հաշվիչներ</span>
-        <span className="breadcrumb-separator">›</span>
-        <span className="current">Ներկի հաշվիչ</span>
-      </div>
-
-      <h2>Ներկի հաշվիչ</h2>
-
-      <p className="tutorial">
-        Մուտքագրեք այն սենյակի չափսերը, որը պետք է ներկել։ Սեղմեք կոճակը՝ այս աշխատանքի համար անհրաժեշտ ներկի քանակը և աշխատաժամերը հաշվարկելու համար։ 
-        Ներքին ներկի ծածկույթը կախված է օգտագործված ներկի ապրանքանիշից։ Ծածկույթի քանակը նշված է ներկի տուփի պիտակի վրա։ Օգտագործեք սա ստորև բերված 
-        <strong> «Գունավորման ծածկույթ»</strong> բաժնում արժեքները կարգավորելու համար։<br />
-        Օրինակ՝ 1 լիտրը կարող է ծածկել՝ 10 մ², 12 մ², 14 մ²։
-      </p>
-
-      <div className="calculator-and-info">
-        <div className="calculator-inputs">
-          <div className="calc-type">
-            <label>
-              <input
-                type="radio"
-                value="wall"
-                checked={calcType === 'wall'}
-                onChange={() => setCalcType('wall')}
-              />
-              Պատ
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="floor"
-                checked={calcType === 'floor'}
-                onChange={() => setCalcType('floor')}
-              />
-              Առաստաղ
-            </label>
-          </div>
-
-          <div className="input-mode">
-            <label>
-              <input
-                type="radio"
-                value="dimensions"
-                checked={inputMode === 'dimensions'}
-                onChange={() => setInputMode('dimensions')}
-              />
-              Չափսերով մուտքագրում
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="area"
-                checked={inputMode === 'area'}
-                onChange={() => setInputMode('area')}
-              />
-              Քառակուսի մետրով մուտքագրում
-            </label>
-          </div>
-
-          {inputMode === 'dimensions' ? (
-            <>
-              <div className="input-group">
-                <label>Երկարություն (մ)</label>
-                <input
-                  type="number"
-                  value={length}
-                  onChange={e => setLength(e.target.value)}
-                  min="0"
-                />
-              </div>
-
-              <div className="input-group">
-                <label>{calcType === 'wall' ? 'Բարձրություն (մ)' : 'Լայնություն (մ)'}</label>
-                <input
-                  type="number"
-                  value={widthOrHeight}
-                  onChange={e => setWidthOrHeight(e.target.value)}
-                  min="0"
-                />
-              </div>
-            </>
-          ) : (
-            <div className="input-group">
-              <label>Մակերես (մ²)</label>
-              <input
-                type="number"
-                value={area}
-                onChange={e => setArea(e.target.value)}
-                min="0"
-              />
-            </div>
-          )}
-
-          <div className="input-group">
-            <label>Ներկի շերտերի քանակը</label>
-            <input
-              type="number"
-              value={coats}
-              onChange={e => setCoats(e.target.value)}
-              min="1"
-            />
-          </div>
-
-          <div className="input-group">
-            <label>
-              Գունավորման ծածկույթ (մ² / լիտր)
-              <div className="examples">Օրինակներ՝ 10, 12, 14</div>
-            </label>
-            <input
-              type="number"
-              value={coverage}
-              onChange={e => setCoverage(e.target.value)}
-              min="0"
-              step="0.1"
-            />
-          </div>
-
-          <button className="btn" onClick={calculatePaint}>Հաշվել</button>
-
-          {result && (
-            <div className="result">
-              <p>Ընդհանուր մակերես՝ <strong>{result.area} մ²</strong></p>
-              <p>Պահանջվող ներկի քանակը՝ <strong>{result.liters} լիտր</strong></p>
-            </div>
-          )}
+      <h2>Ներկի Հաշվիչ</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Երկարություն (մ):</label>
+          <input
+            type="number"
+            name="length"
+            value={roomData.length}
+            onChange={handleChange}
+            required
+            step="0.1"
+          />
         </div>
-
-        <div className="paint-info">
-          <h3>Ներկերի կիրառություն</h3>
-          <p>
-            Ներկերը լայն կիրառություն ունեն շինարարության, վերանորոգման և դիզայներական աշխատանքներում։ Գոյություն ունեն ներկերի, լաքերի բազմաթիվ տեսակներ, որոնցից յուրաքանչյուրն ունի իր կիրառման առանձնահատկությունը։
-          </p>
-          <p>Առավել տարածված են ներկերի հետևյալ խմբերը՝</p>
-          <ul>
-            <li>Էմուլսիոն</li>
-            <li>Ալկիդային</li>
-            <li>Սոսնձային</li>
-            <li>Սիլիկատային</li>
-          </ul>
+        <div>
+          <label>Լայնություն (մ):</label>
+          <input
+            type="number"
+            name="width"
+            value={roomData.width}
+            onChange={handleChange}
+            required
+            step="0.1"
+          />
         </div>
-      </div>
+        <div>
+          <label>Բարձրություն (մ):</label>
+          <input
+            type="number"
+            name="height"
+            value={roomData.height}
+            onChange={handleChange}
+            required
+            step="0.1"
+          />
+        </div>
+        <div>
+          <label>Ծածկույթ (մ²/լիտր):</label>
+          <input
+            type="number"
+            name="coveragePerLiter"
+            value={roomData.coveragePerLiter}
+            onChange={handleChange}
+            required
+            step="0.1"
+          />
+        </div>
+        <button type="submit">Հաշվել</button>
+      </form>
+
+      {result && (
+  <div className="result">
+    <h3>Արդյունք</h3>
+    <p>Սենյակի մակերեսը՝ {result.area} մ²</p>
+    <p>Պահանջվող ներկ՝ {result.litersNeeded} լիտր</p>
+    <p>Նախատեսվող աշխատանքային ժամեր՝ {result.estimatedHours} ժամ</p>
+  </div>
+)}
+
+      {error && <p className="error"> >{error}</p>}
     </div>
-  )
-}
+  );
+};
 
-export default PaintCalculator
+export default PaintCalculator;
