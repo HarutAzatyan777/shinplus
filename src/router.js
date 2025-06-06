@@ -14,10 +14,12 @@ import LaminateCalculator from './pages/calculators/LaminateCalculator';
 import ElectricWiresCalculator from './pages/calculators/ElectricWiresCalculator';
 import LoginPage from './pages/LoginPage';
 import AccountPage from './pages/AccountPage';
+import useAutoLogout from './hooks/useAutoLogout';
 
 import AdminPanel from './pages/AdminPanel';  // <-- Ավելացրիր այստեղ
 
 const AppRouter = () => {
+  useAutoLogout();
   return (
     <Routes>
       <Route path="/" element={<Layout><Home /></Layout>} />

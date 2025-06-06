@@ -143,15 +143,18 @@ const AuthForm = () => {
       dispatch(
         loginSuccess({
           token: res.data.token,
+          expiresAt: res.data.user?.expiresAt || null,
           user: {
-            uid: res.data.user?.uid || '', // ✅ Ավելացրու uid այստեղ
+            uid: res.data.user?.uid || null,
             email,
             profilePicture: res.data.user?.profilePicture || null,
             name: res.data.user?.name || '',
             username: res.data.user?.username || '',
+            role: res.data.user?.role || 'user',
           },
         })
       );
+      
   
       setMessage('');
       setMessageType('');
