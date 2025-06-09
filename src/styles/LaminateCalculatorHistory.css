@@ -1,0 +1,121 @@
+/* LaminateCalculatorHistory.css */
+
+.laminate-history {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .laminate-history h3 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .laminate-history__error {
+    color: red;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .laminate-history__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .laminate-history__entry {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .laminate-history__entry span {
+    font-size: 0.95rem;
+  }
+  
+  .laminate-history__edit-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .laminate-history__edit-form input {
+    padding: 8px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    flex: 1 1 100px;
+  }
+  
+  .laminate-history__edit-form button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    transition: background 0.3s ease;
+  }
+  
+  .laminate-history__edit-form button:last-child {
+    background-color: #f44336;
+  }
+  
+  .laminate-history__edit-form button:hover {
+    opacity: 0.9;
+  }
+  
+  .laminate-history__date {
+    color: #555;
+    font-size: 0.85rem;
+  }
+  
+  .laminate-history__details {
+    font-weight: bold;
+    color: #222;
+  }
+  
+  .laminate-history__actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .laminate-history__actions button {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #2196f3;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .laminate-history__actions button:hover {
+    opacity: 0.85;
+  }
+  
+  .laminate-history__more-toggle {
+    text-align: center;
+    margin-top: 16px;
+  }
+  
+  .laminate-history__more-toggle button {
+    background: transparent;
+    border: none;
+    color: #007bff;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  
